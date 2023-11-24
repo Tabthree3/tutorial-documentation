@@ -24,7 +24,7 @@ echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.n
 ``` shell title="Update repository and install Java" linenums="1"
 apt update
 apt install temurin-17-jdk
-/usr/bin/java --version
+
 
 ```
 
