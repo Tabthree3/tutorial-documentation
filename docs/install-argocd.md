@@ -10,9 +10,8 @@ sudo apt upgrade
 ```
 ## Create Kubernetes Cluster
 ``` bash title="Run from shell prompt" linenums="1"
-sudo bash
+
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --disable traefik
-exit 
 mkdir .kube
 sudo cp /etc/rancher/k3s/k3s.yaml ./config
 sudo chown dmistry:dmistry config
