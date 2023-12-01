@@ -13,6 +13,7 @@ sudo apt upgrade
 
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --disable traefik
 mkdir .kube
+cd .kube
 sudo cp /etc/rancher/k3s/k3s.yaml ./config
 sudo chown dmistry:dmistry config
 chmod 400 config
