@@ -122,6 +122,13 @@ argocd login argocd.dev.dman.cloud
 ``` shell title="Update password" linenums="1"
 argocd account update-password
 ```
+# Adding cluster with managed k8s
+Remember to change cluster name accordingly
+```
+argocd cluster add do-nyc1-k8s-1-28-2-do-0-nyc1-1701470051145 \
+    --name do-nyc1-k8s-1-28-2-do-0-nyc1-1701470051145 \
+    --kubeconfig ~/.kube/config
+```
 # Deploy Demo Application
 You can use the below repository to deploy a demo nginx application
 ``` shell title="This repository has a sample application" linenums="1"
