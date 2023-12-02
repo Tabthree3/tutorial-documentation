@@ -80,7 +80,6 @@ metadata:
   namespace: argocd
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     # If you encounter a redirect loop or are getting a 307 response code
@@ -88,8 +87,9 @@ metadata:
     #
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
+  ingressClassName: nginx
   rules:
-  - host: argocd.dev.dman.cloud
+  - host: argocd.tabthree3.net
     http:
       paths:
       - path: /
@@ -101,7 +101,7 @@ spec:
               name: https
   tls:
   - hosts:
-    - argocd.dev.dman.cloud
+    - argocd.tabthree3.net
     secretName: argocd-secret # do not change, this is provided by Argo CD
 ```
 ``` shell title="Apply manifest" linenums="1"
