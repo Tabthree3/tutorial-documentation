@@ -35,9 +35,51 @@ echo "export KUBECONFIG=/home/ubuntu/.kube/config" >> /home/ubuntu/.bashrc
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
+
+### Editting ConfigMap RBAC
+``` console title="Run from shell prompt" linenums="1"``
+
+kubectl get configmap argocd-rbac-cm -n argocd -o yaml > argocd-rbac-cm.yaml
+kubectl apply -f argocd-rbac-cm.yaml
+
+kubectl rollout restart deployment argocd-server -n argocd
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    # Existing roles and permissions
+    p, role:org-admin, applications, *, */*, allow
+    p, role:org-admin, clusters, get, *, allow
+    p, role:org-admin, repositories, get, *, allow
+    p, role:org-admin, repositories, create, *, allow
+    p, role:org-admin, repositories, update, *, allow
+    p, role:org-admin, repositories, delete, *, allow
+    p, role:org-admin, projects, get, *, allow
+    p, role:org-admin, projects, create, *, allow
+    p, role:org-admin, projects, update, *, allow
+    p, role:org-admin, projects, delete, *, allow
+    p, role:org-admin, logs, get, *, allow
+    p, role:org-admin, exec, create, */*, allow
+
+    g, your-github-org:your-team, role:org-admin
+
+    # New role for viewing running jobs
+    p, role:view-jobs, applications, get, */*, allow
+    p, role:view-jobs, applications, sync, */*, allow
+    p, role:view-jobs, applications, action/*, */*, allow
+
+    # Grant 'view-jobs' role to 'john_doe'
+    g, john_doe, role:view-jobs
+```
+
 ### Change Service to NodePort
 Edit the service can change the service type from `ClusterIP` to `NodePort`
-``` shell title="Run from shell prompt" linenums="1"
+```  shell title="Run from shell prompt" linenums="1"
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}' 
 ```
 ### Fetch Password
@@ -47,7 +89,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 # Optional (Enable TLS w/Ingress)
 If you want to enable access from the internet or private network you can follow the instructions below to install and configure an ingress-controller with lets-encrypt.
-``` shell title="Install Cert-Manager" linenums="1"
+``` shell title="Install Cert-Manager" linenums="1" ``
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm install \
