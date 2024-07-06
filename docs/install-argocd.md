@@ -37,7 +37,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 ```
 
 ### Editting ConfigMap RBAC
-``` console title="Run from shell prompt" linenums="1"``
+``` console title="Run from shell prompt" linenums="1"
 
 kubectl get configmap argocd-rbac-cm -n argocd -o yaml > argocd-rbac-cm.yaml
 kubectl apply -f argocd-rbac-cm.yaml
