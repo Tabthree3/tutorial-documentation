@@ -11,14 +11,24 @@ sudo apt upgrade
 ## Create Kubernetes Cluster
 ``` bash title="Run from shell prompt" linenums="1"
 
+#!/bin/bash
+set -e
+
+# Install K3s server
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --disable traefik
-mkdir .kube
-cd .kube
-sudo cp /etc/rancher/k3s/k3s.yaml ./config
-sudo chown dmistry:dmistry config
-chmod 400 config
-export KUBECONFIG=~/.kube/config
-```
+
+# Configure kubeconfig
+mkdir -p /home/ubuntu/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml /home/ubuntu/.kube/config
+sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+sudo chmod 400 /home/ubuntu/.kube/config
+
+# Export KUBECONFIG
+export KUBECONFIG=/home/ubuntu/.kube/config
+echo "export KUBECONFIG=/home/ubuntu/.kube/config" >> /home/ubuntu/.bashrc
+
+# Optional: Start any additional services or configurations here
+
 
 ### Install ArgoCD
 ``` shell title="Run from shell prompt" linenums="1"
